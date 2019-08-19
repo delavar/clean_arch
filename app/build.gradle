@@ -1,0 +1,66 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    defaultConfig {
+        applicationId rootProject.ext.androidApplicationId
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        versionCode rootProject.ext.androidVersionCode
+        versionName rootProject.ext.androidVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def appDependencies = rootProject.ext.presentationDependencies
+    def testDependencies = rootProject.ext.presentationTestDependencies
+
+    implementation appDependencies.kotlinJdk7
+    implementation appDependencies.appCompat
+    implementation appDependencies.ktx
+    implementation appDependencies.constraintLayout
+
+    implementation appDependencies.rxJava
+
+    implementation appDependencies.material
+
+    //Lifecycle
+    implementation appDependencies.archLifeCycle
+    testImplementation testDependencies.archTesting
+
+
+    // Dagger
+    implementation appDependencies.dagger
+    implementation appDependencies.daggerAndroid
+    kapt appDependencies.daggerCompiler
+    kapt appDependencies.daggerAndroidCompiler
+
+    testImplementation testDependencies.jUnit
+    testImplementation testDependencies.mockito
+    testImplementation testDependencies.mockitoInline
+    testImplementation testDependencies.mockitoKotlin
+
+    androidTestImplementation testDependencies.testRunner
+    androidTestImplementation testDependencies.espresso
+
+    implementation project(':domain')
+    implementation project(':data')
+}

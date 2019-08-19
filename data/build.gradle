@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def appDependencies = rootProject.ext.dataDependencies
+    def testDependencies = rootProject.ext.dataTestDependencies
+
+    implementation appDependencies.kotlinJdk7
+    implementation appDependencies.ktx
+    implementation appDependencies.retrofit
+    implementation appDependencies.gson
+    implementation appDependencies.javaxInject
+    implementation appDependencies.rxJava
+
+    testImplementation testDependencies.jUnit
+    //androidTestImplementation testDependencies.testRunner
+    //androidTestImplementation testDependencies.espresso
+    testImplementation testDependencies.mockito
+    testImplementation testDependencies.mockitoInline
+    testImplementation testDependencies.mockitoKotlin
+
+    implementation project(':domain')
+}
+
